@@ -9,6 +9,7 @@
 **/.toolstarget
 **/.vs
 **/.vscode
+**/.idea
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
@@ -22,4 +23,7 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+.travis.yml
+LICENSE
+workspace.code*.code-workspace
 README.md
