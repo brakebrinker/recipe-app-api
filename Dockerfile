@@ -1,21 +1,25 @@
 FROM python:3.8.6-alpine
 
-ENV PYTHONUNBUFFERED 1
+# Keeps Python from generating .pyc files in the container
+ENV PYTHONDONTWRITEBYTECODE=1
 
-COPY ./requirenments.txt /requirenments.txt
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED=1
+
+# Install pip requirements
+ADD requirements.txt .
 RUN apk add --update --no-cache postgresql-client jpeg-dev
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
         gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev
-RUN pip install -r requirenments.txt
+RUN python -m pip install -r requirements.txt
 RUN apk del .tmp-build-deps
 
 RUN mkdir /app
 WORKDIR /app
-COPY ./app /app
+ADD ./app /app
 
 RUN mkdir -p /vol/web/media
 RUN mkdir -p /vol/web/static
-RUN adduser -D user
-RUN chown -R user:user /vol/
-RUN chmod -R 755 /vol/web
+
+RUN adduser -D user && chown -R user:user /vol/ && chmod -R 755 /vol/web
 USER user
